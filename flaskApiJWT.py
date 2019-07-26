@@ -14,7 +14,7 @@ import json
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['PRESHARED_SECRET_KEY'] = 'arbitrary secret key used to encod/decode/sign jwt'
+app.config['PRESHARED_SECRET_KEY'] = 'arbitrary secret key used to encode/decode/sign jwt'
 
 
 # Initialize user DB (read from json file)
@@ -25,7 +25,7 @@ with open('userdb.json') as f:
 # Routes
 @app.route('/public', methods=['GET'])
 def get_public_page():
-    return jsonify({'message': 'You reached a public page'})
+    return jsonify({'message': 'You reached a public page!'})
 
 
 @app.route('/private', methods=['GET'])
@@ -44,7 +44,7 @@ def get_private_page():
 
     # If token is not provided return 401
     if not token:
-        return jsonify({'message': 'Authentication token is missing!'}), 403
+        return jsonify({'message': 'Authentication token is missing!'}), 401
 
     # Check token validity 
     try:
