@@ -14,7 +14,7 @@ import json
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['PRESHARED_SECRET_KEY'] = 'arbitraty secret key used to encod/decode/sign jwt'
+app.config['PRESHARED_SECRET_KEY'] = 'arbitrary secret key used to encod/decode/sign jwt'
 
 
 # Initialize user DB (read from json file)
