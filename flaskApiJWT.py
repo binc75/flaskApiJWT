@@ -45,7 +45,7 @@ def get_private_page():
 
     # If token is not provided return 401
     if not token:
-        return jsonify({'message': 'Authentication token is missing!'}), 401
+        return jsonify({'message': 'Authentication token is missing!'}), 403
 
     # Check token validity 
     try:
@@ -55,7 +55,7 @@ def get_private_page():
         return jsonify({'message': '{}, you reached a private page'.format(user_from_token),'token_valid_until': '{}'.format(exp_date_from_token)}), 200
 
     except jwt.ExpiredSignatureError:
-        return jsonify({'message': 'Token is expired!'}), 401
+        return jsonify({'message': 'Token is expired!'}), 403
 
     except:
         return jsonify({'message': 'Token provided is not valid'}), 401
