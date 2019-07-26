@@ -37,7 +37,7 @@ Server: Werkzeug/0.15.5 Python/3.7.1
 Date: Fri, 26 Jul 2019 11:42:29 GMT
 
 {
-  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5iaWFuY2hpIiwiZXhwIjoxNTY0MTQzMTQ5fQ.q2xZWEL_za1tzWaUqZ7A8tS86HgvMy4JNZzTjdIkaIA"
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.q2xZWEL_za1tzWaUqZ7A8tS86HgvMy4JNZzTjdIkaIA"
   }
 
 
@@ -46,7 +46,8 @@ Date: Fri, 26 Jul 2019 11:42:29 GMT
 Access private page using the authorization token
 ``` bash
 $ curl -i -H 'Accept: application/json' \
-          -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5iaWFuY2hpIiwiZXhwIjoxNTY0MTQzMTQ5fQ.q2xZWEL_za1tzWaUqZ7A8tS86HgvMy4JNZzTjdIkaIA' http://127.0.0.1:8080/private
+          -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.q2xZWEL_za1tzWaUqZ7A8tS86HgvMy4JNZzTjdIkaIA' \
+          http://127.0.0.1:8080/private
 
 HTTP/1.0 200 OK
 Content-Type: application/json
