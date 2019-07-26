@@ -41,7 +41,6 @@ def get_private_page():
 
     if 'Authorization' in request.headers:
         token = request.headers['Authorization'].replace('Bearer ', '')
-        print(token)
 
     # If token is not provided return 401
     if not token:
