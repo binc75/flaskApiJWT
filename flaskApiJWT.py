@@ -34,7 +34,7 @@ def get_private_page():
     token = None
 
     # Check if token is passed in the header of the request, if the case set token to this value
-    # Checking for x-access-token or Authorization Bearer
+    # Checking for "x-access-token" or "Authorization: Bearer"
     print(request.headers)
     if 'x-access-token' in request.headers:
         token = request.headers['x-access-token']
