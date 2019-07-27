@@ -16,10 +16,16 @@ import json
 app = Flask(__name__)
 app.config['PRESHARED_SECRET_KEY'] = 'arbitrary secret key used to encode/decode/sign jwt'
 
+# Functions
+def load_db_user(inputfile):
+    '''Load user/password db from json file'''
+    with open(inputfile) as f:
+        userdb = json.load(f)
+        return userdb
 
-# Initialize user DB (read from json file)
-with open('userdb.json') as f:
-    userdb = json.load(f)
+
+# Initialize user DB
+userdb = load_db_user('userdb.json')
 
 
 # Routes
@@ -35,7 +41,6 @@ def get_private_page():
 
     # Check if token is passed in the header of the request, if the case set token to this value
     # Checking for "x-access-token" or "Authorization: Bearer"
-    print(request.headers)
     if 'x-access-token' in request.headers:
         token = request.headers['x-access-token']
 
@@ -51,7 +56,7 @@ def get_private_page():
         token_data = jwt.decode(token, app.config['PRESHARED_SECRET_KEY'])
         user_from_token = token_data['username']
         exp_date_from_token = datetime.datetime.fromtimestamp(token_data['exp']).strftime('%Y-%m-%d %H:%M:%S')
-        return jsonify({'message': '{}, you reached a private page'.format(user_from_token),'token_valid_until': '{}'.format(exp_date_from_token)}), 200
+        return jsonify({'message': 'Congratulation {}, you reached a private page!'.format(user_from_token),'token_valid_until': '{}'.format(exp_date_from_token)}), 200
 
     except jwt.ExpiredSignatureError:
         return jsonify({'message': 'Token is expired!'}), 403
