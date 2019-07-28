@@ -10,11 +10,52 @@ from flask import Flask, request, jsonify, make_response
 import datetime
 import jwt
 import json
+from functools import wraps
 
 
 # Initialize Flask app
 app = Flask(__name__)
 app.config['PRESHARED_SECRET_KEY'] = 'arbitrary secret key used to encode/decode/sign jwt'
+
+# Decorators
+def token_validate(original_funtion):
+    ''' Decorator for token valitation to be applied to protectec route'''
+    @wraps(original_funtion)
+    def decorated(*args, **kwargs):
+
+        token = None
+
+        # Check if token is passed in the header of the request, if the case set token to this value
+        # Checking for "x-access-token" or "Authorization: Bearer"
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization'].replace('Bearer ', '')
+
+        # If token is not provided return 401
+        if not token:
+            return jsonify({'message': 'Authentication token is missing!'}), 401
+
+        # Check token validity 
+        try:
+            token_data = jwt.decode(token, app.config['PRESHARED_SECRET_KEY'])
+            user_from_token = token_data['username']
+            exp_date_from_token = datetime.datetime.fromtimestamp(token_data['exp']).strftime('%Y-%m-%d %H:%M:%S')
+            print(token_data)
+            print(user_from_token)
+
+        except jwt.ExpiredSignatureError:
+            return jsonify({'message': 'Token is expired!'}), 403
+
+        except:
+            return jsonify({'message': 'Token provided is not valid'}), 401
+
+        return original_funtion(user_from_token, exp_date_from_token, *args, **kwargs)
+
+    return decorated
+
+
 
 # Functions
 def load_db_user(inputfile):
@@ -22,6 +63,7 @@ def load_db_user(inputfile):
     with open(inputfile) as f:
         userdb = json.load(f)
         return userdb
+
 
 
 # Initialize user DB
@@ -32,6 +74,15 @@ userdb = load_db_user('userdb.json')
 @app.route('/public', methods=['GET'])
 def get_public_page():
     return jsonify({'message': 'You reached a public page!'})
+
+
+@app.route('/secret', methods=['GET', 'POST'])
+@token_validate
+def get_secret_page(current_user, token_exp_date):
+
+    return jsonify({'message': 'Congratulation {}, you reached a private page!'.format(current_user),'token_valid_until': '{}'.format(token_exp_date)}), 200
+
+
 
 
 @app.route('/private', methods=['GET'])
