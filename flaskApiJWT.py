@@ -11,15 +11,18 @@ import datetime
 import jwt
 import json
 from functools import wraps
+import bcrypt
 
 
 # Initialize Flask app
 app = Flask(__name__)
 app.config['PRESHARED_SECRET_KEY'] = 'arbitrary secret key used to encode/decode/sign jwt'
 
+
 # Decorators
 def token_validate(original_funtion):
     ''' Decorator for token valitation to be applied to protectec route'''
+
     @wraps(original_funtion)
     def decorated(*args, **kwargs):
 
@@ -42,8 +45,6 @@ def token_validate(original_funtion):
             token_data = jwt.decode(token, app.config['PRESHARED_SECRET_KEY'])
             user_from_token = token_data['username']
             exp_date_from_token = datetime.datetime.fromtimestamp(token_data['exp']).strftime('%Y-%m-%d %H:%M:%S')
-            print(token_data)
-            print(user_from_token)
 
         except jwt.ExpiredSignatureError:
             return jsonify({'message': 'Token is expired!'}), 403
@@ -76,6 +77,7 @@ def get_public_page():
     return jsonify({'message': 'You reached a public page!'})
 
 
+# Token protected route using the @token_validate decorator
 @app.route('/secret', methods=['GET', 'POST'])
 @token_validate
 def get_secret_page(current_user, token_exp_date):
@@ -84,7 +86,8 @@ def get_secret_page(current_user, token_exp_date):
 
 
 
-
+# Token proctected route with check inside the function
+# This is here only as example in case you don't want to create a decorator
 @app.route('/private', methods=['GET'])
 def get_private_page():
 
@@ -127,9 +130,8 @@ def login():
         return make_response('Can not verify identity. Unauthorized!', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
     # Check username & password
-    if auth.username in userdb and auth.password == userdb[auth.username]['password']:
+    if auth.username in userdb and bcrypt.checkpw(auth.password.encode('UTF-8'), userdb[auth.username]['pwhash'].encode('UTF-8')):
         token = jwt.encode({'username': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['PRESHARED_SECRET_KEY'])
-        print(token.decode('UTF-8'))
         return jsonify({'token': token.decode('UTF-8')}), 200
     else:
         return jsonify({'message': 'Username or password incorrect!'}), 401

@@ -1,11 +1,11 @@
 {
     "nbianchi": {
-        "password": "12345"
+        "pwhash" : "$2b$12$JclDpznKPeKFHqNBS0TXjOrBt/GrcJ5dwSIpoZ10ulwJ8wrs1Wrtm"
     },
     "binc75": {
-        "password": "12345"
+        "pwhash" : "$2b$12$n157.uRhsPEtzHDa8tWj2Og.RStFhx4EW1epJPHHDoKZPQn6PaFuW"
     },
     "admin": {
-        "password": "12345"
+        "pwhash" : "$2b$12$JclDpznKPeKFHqNBS0TXjOrBt/GrcJ5dwSIpoZ10ulwJ8wrs1Wrtm"
     }
 }

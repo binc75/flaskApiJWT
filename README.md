@@ -61,3 +61,13 @@ Date: Fri, 26 Jul 2019 11:46:22 GMT
     }
 
 ```
+
+## Passwords hash generation
+In order to creae the hased passwords to put in the JSON file follow this procedure.
+``` python
+>>> import bcrypt
+>>> password = 'abc123'
+>>> hashed = bcrypt.hashpw(password.encode('UTF-8'), bcrypt.gensalt())
+>>> print(hashed.decode('UTF-8'))
+$2b$12$6jqow5hAKmvl5AHCIOtjkuVavhyFFV7.Dnyc6gFdFWH0BG3IT1SEO
+```
