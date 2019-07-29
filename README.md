@@ -1,6 +1,7 @@
 # Flask RestAPI POC
 
-Simple RestAPI POC with authentication capabilities and JWT (JSON Web Token) management.
+Simple RestAPI POC with authentication capabilities, JWT (JSON Web Token) management and python decorators.
+
 
 ## Installation
 ``` bash
