@@ -12,5 +12,5 @@ python3 -m venv env
 source env/bin/activate
 pip install -r requirements.txt --no-cache-dir
 pip install uwsgi --no-cache-dir
-uwsgi --http :8080  --callable app --processes 4 --threads 2 --wsgi-file flaskApiJWT.py 
+uwsgi --http :8080  --callable app --processes 4 --threads 2 --master --stats 127.0.0.1:9191 --logger file:logfile=/tmp/uwsgi.log,maxsize=2000000 --wsgi-file flaskApiJWT.py 
 ```
